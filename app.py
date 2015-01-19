@@ -10,5 +10,11 @@ app.secret_key = 'development'
 def index():
     return render_template("index.html")
 
+
+@app.route("/capital")
+def capital():
+    return render_template("capital.html")
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0")

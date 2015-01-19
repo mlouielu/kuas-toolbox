@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block container %}
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">我要申請</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-control-wrapper">
+                <input id="number_input" class="form-control empty" placeholder="填寫金額" type="text" onkeyup="change_capital();">
+                <span class="material-input"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">這麼多的錢</h3>
+        </div>
+        <div class="panel-body">
+            <h2 id="number_output_basic"></h2>
+            <h2 id="number_output_advance"></h2>
+            <h2 id="number_output_bus"></h2>
+            <h2 id="number_output_school"></h2>
+        </div>
+    </div>
+
+
+<script>
+    function change_capital() {
+        number = document.getElementById("number_input").value;
+        chinese_capital = to_chinese_capital(number + " ");
+
+        basic = document.getElementById("number_output_basic");
+        advance = document.getElementById("number_output_advance");
+        school = document.getElementById("number_output_school");
+        bus = document.getElementById("number_output_bus");
+
+        if (chinese_capital !== "圓整") {
+            basic.innerHTML = "懇請學生會補助共同經費" + chinese_capital;
+            advance.innerHTML = "懇請學生會補助基本經費" + chinese_capital;
+            bus.innerHTML = "懇請學生會補助燕巢車資" + chinese_capital;
+            school.innerHTML = "懇請學校補助" + chinese_capital;
+        }else {
+            basic.innerHTML = "";
+            advance.innerHTML = "";
+            bus.innerHTML = "";
+            school.innerHTML = "";
+        }
+    }
+
+    function to_chinese_capital(n) {
+        number = ["零", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖"];
+        value = ["拾", "億", "仟", "佰", "拾", "萬", "仟", "佰", "拾", ""];
+
+        num = parseInt(n);
+        num_divide = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        digit = 9;
+
+        while (num) {
+            num_divide[digit] = num % 10;
+            digit -= 1;
+            num = ~~(num / 10);
+        }
+
+        result = [];
+        for (i=digit + 1; i < 10; ++i) {
+            if (num_divide[i] != 0) {
+                result.push(number[num_divide[i]]);
+                result.push(value[i]);
+            } else if (i == 1 || i == 5) {
+                result.push(value[i]);
+            } else if (num_divide[i + 1] != 0) {
+                result.push(number[num_divide[i]]);
+            }
+        };
+
+        result.push("圓整");
+
+        return result.join("");
+    }
+</script>
+{% endblock %}
