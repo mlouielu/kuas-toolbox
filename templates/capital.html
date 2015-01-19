@@ -32,7 +32,7 @@
 <script>
     function change_capital() {
         number = document.getElementById("number_input").value;
-        chinese_capital = to_chinese_capital(number + " ");
+        chinese_capital = to_chinese_capital(eval(number) + " ");
 
         basic = document.getElementById("number_output_basic");
         advance = document.getElementById("number_output_advance");
