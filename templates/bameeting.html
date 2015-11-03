@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>高應工具箱 - 行政/校務會議記錄</title>
+{% endblock %}
+
+{% block meta_meta %}
+    <meta charset="utf-8">
+    <meta property="og:image" content="http://i.imgur.com/oL8Oa0I.jpg"/>
+    <meta property="og:title" content="高應工具箱 - 行政/校務會議記錄"/>
+    <meta property="og:description"
+    content="好用的高應行政/校務會議記錄查詢系統, 工具人必備！" />
+{% endblock %}
+
+
+
+{% block container %}
+<style>
+.frameWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+}
+.frameWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+}
+
+.btn {
+    padding: 8px 15px;
+}
+</style>
+
+<div class="row text-center">
+<div class="col-sm-8">
+<table bordercolordark="green" bgcolor="#CCFFCC" border="1" cellpadding="1" cellspacing="0" align="center">
+<tbody><tr bgcolor="#CCFF99">
+<tbody><tr bgcolor="#CCFF99">
+<td align="center"><b>90學年度校務會議</b></td><td colspan="2" align="center"><b>90學年度行政會議</b></td>
+</tr>
+<tr>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S90_01(900926).htm">[90年09月26日]</a></td>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_01(900803).htm">[90年08月03日]</a></td>
+<td>第2次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_02(900905).htm">[90年09月05日]</a></td>
+</tr>
+<tr>
+<td>第2次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S90_02(901104).htm">[90年11月04日]</a></td>
+<td>第3次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_03(901017).htm">[90年10月17日]</a></td>
+<td>第4次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_04(901128).htm">[90年11月28日]</a></td>
+</tr>
+<tr>
+<td>第3次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S90_03(910508).pdf">[91年05月08日]</a></td>
+<td>第5次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_05(910109).htm">[90年01月09日]</a></td>
+<td>第6次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_06(910306).htm">[91年03月06日]</a></td>
+</tr>
+<tr>
+<td>第4次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S90_04(910626).pdf">[91年06月26日]</a></td>
+<td>第7次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_07(910410).pdf">[91年04月10日]</a></td>
+<td>第8次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A90_08(910612).pdf">[91年06月12日]</a></td>
+</tr>
+<tr bgcolor="#CCFF99">
+<td align="center"><b>91學年度校務會議</b></td><td colspan="2" align="center"><b>91學年度行政會議</b></td>
+</tr>
+<tr>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S91_01(911120).pdf">[91年11月20日]</a></td>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_01(910813).pdf">[91年08月13日]</a></td>
+<td>第2次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_02(910911).pdf">[91年09月11日]</a></td>
+</tr>
+<tr>
+<td>第2次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S91_02(920414).pdf">[92年04月14日]</a></td>
+<td>第3次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_03(911016).pdf">[91年10月16日]</a></td>
+<td>第4次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_04(911120).pdf">[91年11月20日]</a></td>
+</tr>
+<tr>
+<td>　</td>
+<td>第5次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_05(911225).pdf">[91年12月25日]</a></td>
+<td>第6次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_06(920122).pdf">[92年01月22日]</a></td>
+</tr>
+<tr>
+<td>　</td>
+<td>第7次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_07(920219).pdf">[92年02月19日]</a></td>
+<td>第8次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_08(920316).pdf">[92年03月16日]</a></td>
+</tr>
+<tr>
+<td>　</td>
+<td>第9次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_09(920514).pdf">[92年05月14日]</a></td>
+<td>第10次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A91_10(920618).pdf">[92年06月18日]</a></td>
+</tr>
+<tr bgcolor="#CCFF99">
+<td align="center"><b>92學年度校務會議</b></td><td colspan="2" align="center"><b>92學年度行政會議</b></td>
+</tr>
+<tr>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/校務會議紀錄/S92_01(921112).pdf">[92年11月12日]</a></td>
+<td>第1次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A92_01(920820).pdf">[92年08月20日]</a></td>
+<td>第2次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A92_02(920903).pdf">[92年09月03日]</a></td>
+</tr>
+<tr>
+<td>　</td>
+<td>第3次會議紀錄<a href="http://bameeting.kuas.edu.tw/會議紀錄/行政會議紀錄/A92_03(921015).pdf">[92年10月15日]</a></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="row">
+   <div class="col-sm-6 col-md-4 text-center">
+       <h2>校務會議</h2>
+       <div class="btn-group-vertical" id="uam">
+       {% for uid in uam %}
+          <a href="/bameeting/{{uid[1]}}" class="btn btn-flat btn-default">{{ uid[0] }}</a>
+       {% endfor %}
+       </div>
+   </div>
+   <div class="col-sm-6 col-md-4 text-center">
+       <h2>行政會議</h2>
+       <div class="btn-group-vertical" id="acm">
+       {% for aid in acm %}
+           <a href="/bameeting/{{aid[1]}}" class="btn btn-default">{{ aid[0] }}</a>
+       {% endfor %}
+       </div>
+    </div>
+</div>
+
+{% endblock %}
