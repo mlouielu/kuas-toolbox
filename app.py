@@ -81,6 +81,10 @@ def bameeting_issue(issue_no):
             ".\\Sign\\", "http://bameeting.kuas.edu.tw/.\\Sign\\")
 
         root = etree.HTML(content)
+
+        # Change title
+        root.xpath("//title")[0].text = issue_no
+
         # Remove scripts tag
         for script in root.xpath("//script"):
             script.getparent().remove(script)
@@ -92,6 +96,11 @@ def bameeting_issue(issue_no):
         # Add id to font tags
         for index, font in enumerate(root.xpath("//font")):
             font.attrib["id"] = str(index + 1)
+
+            # Check follow-up report div
+            if not font.xpath("div/text()") and font.xpath("div"):
+                font.xpath("div")[0].text = "DELETE"
+
 
         # Add GA tag
         ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
