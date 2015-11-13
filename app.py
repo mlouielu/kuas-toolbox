@@ -33,7 +33,8 @@ def memo():
 
 @app.route("/fuckthis")
 def fuckthis():
-    return render_template("fuckthis.html")
+    return render_template("fuckthis.html",
+                           ga=const.ga_string)
 
 
 @app.route("/club/beginning")
