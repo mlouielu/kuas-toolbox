@@ -82,8 +82,8 @@ def bameeting_issue(issue_no):
 
         root = etree.HTML(content)
 
-        # Change title
-        root.xpath("//title")[0].text = issue_no
+        # Change titles
+        root.xpath("//title")[0].text = u"國立高雄應用科技大學 - %s - 會議記錄" % (issue_no)
 
         # Remove scripts tag
         for script in root.xpath("//script"):
