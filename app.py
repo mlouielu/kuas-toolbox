@@ -3,18 +3,33 @@
 import const
 import requests
 from lxml import etree
-from flask import Flask, render_template, \
-    redirect, url_for, session, request
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 app.debug = False
 app.secret_key = 'ggalkjfds;aksjdf@@'
 
 
+def get_meeting_list():
+    r = requests.get("http://bameeting.kuas.edu.tw/Meeting_Html_Ok_Sel.asp")
+    r.encoding = "big5"
+
+    root = etree.HTML(r.text)
+
+    university_affairs_meeting = [(i.text, i.values()[0]) for i in root.xpath(
+        "//select[@name='State0']")[0].iter()][1:]
+    administrative_council_meeting = [(i.text, i.values()[0]) for i in root.xpath(
+        "//select[@name='State']")[0].iter()][1:]
+
+    return university_affairs_meeting, administrative_council_meeting
+
+
 @app.route("/sitemap.xml")
 def sitemap():
     url_root = request.url_root[:-1]
-    rules = app.url_map.iter_rules()
+
+    uam, acm = get_meeting_list()
+    rules = list(app.url_map.iter_rules()) + uam + acm
 
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
@@ -59,19 +74,11 @@ def committee():
 
 @app.route("/bameeting")
 def bameeting():
-    r = requests.get("http://bameeting.kuas.edu.tw/Meeting_Html_Ok_Sel.asp")
-    r.encoding = "big5"
-
-    root = etree.HTML(r.text)
-
-    university_affairs_meeting = [(i.text, i.values()[0]) for i in root.xpath(
-        "//select[@name='State0']")[0].iter()][1:]
-    administrative_council_meeting = [(i.text, i.values()[0]) for i in root.xpath(
-        "//select[@name='State']")[0].iter()][1:]
+    uam, acm = get_meeting_list()
 
     return render_template("bameeting.html",
-                           uam=university_affairs_meeting,
-                           acm=administrative_council_meeting)
+                           uam=uam,
+                           acm=acm)
 
 
 @app.route("/bameeting/<string:issue_no>")
@@ -80,7 +87,10 @@ def bameeting_issue(issue_no):
         return render_template("principle.html")
     else:
         r = requests.post("http://bameeting.kuas.edu.tw/Meeting_Html_Ok.asp",
-                          data={"Meeting_ID": issue_no.encode("big5"), "Meeting_ID0": ""})
+                          data={
+                              "Meeting_ID": issue_no.encode("big5"),
+                              "Meeting_ID0": ""
+                          })
 
         r.encoding = "big5"
         content = r.text
@@ -109,7 +119,6 @@ def bameeting_issue(issue_no):
             # Check follow-up report div
             if not font.xpath("div/text()") and font.xpath("div"):
                 font.xpath("div")[0].text = "DELETE"
-
 
         # Add GA tag
         ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
