@@ -11,6 +11,14 @@ app.debug = False
 app.secret_key = 'ggalkjfds;aksjdf@@'
 
 
+@app.route("/sitemap.xml")
+def sitemap():
+    url_root = request.url_root[:-1]
+    rules = app.url_map.iter_rules()
+
+    return render_template("sitemap.xml", url_root=url_root, rules=rules)
+
+
 @app.route('/')
 def index():
     return render_template("index.html")
