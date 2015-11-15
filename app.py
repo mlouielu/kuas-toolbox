@@ -36,6 +36,11 @@ def sitemap():
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
 
+@app.route("robot.txt")
+def robot():
+    return "User-agent: *"
+
+
 @app.route('/')
 def index():
     return render_template("index.html")
