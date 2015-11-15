@@ -36,7 +36,7 @@ def sitemap():
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
 
-@app.route("robots.txt")
+@app.route("/robots.txt")
 def robots():
     return "User-agent: *"
 
