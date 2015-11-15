@@ -29,7 +29,9 @@ def sitemap():
     url_root = request.url_root[:-1]
 
     uam, acm = get_meeting_list()
-    rules = list(app.url_map.iter_rules()) + uam + acm
+    rules = list(app.url_map.iter_rules()) + \
+        ["/bameeting/" + i[1] for i in uam] + \
+        ["/bameeting/" + i[1] for i in acm]
 
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
