@@ -87,7 +87,10 @@ def committee():
 def kuaslaw():
     content = requests.get("https://raw.githubusercontent.com/grapherd/kuaslaw/master/README.md").content
 
-    return render_template("law.html", content=content)
+    try:
+        return render_template("law.html", content=content)
+    except UnicodeDecodeError:
+        return render_template("law.html", content=content.decode("utf-8"))
 
 
 @app.route("/ppp")
