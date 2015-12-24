@@ -1,0 +1,25 @@
+n{% extends "layout.html" %}
+
+{% block title %}
+<title>高應工具箱 - 高應大學生自治會法規編纂</title>
+{% endblock %}
+
+{% block meta_meta %}
+    <meta charset="utf-8">
+    <meta property="og:image" content="http://i.imgur.com/tRzjTAN.jpg"/>
+    <meta property="og:title" content="高應工具箱 - 高應大學生自治會法規編纂"/>
+    <meta property="og:description"
+    content="各種高應大學生自治會法規, 工具人必備！" />
+    
+    <script>
+    {{ ga | safe }}
+    </script>
+{% endblock %}
+
+
+
+{% block container %}
+
+{{ content | markdown}}
+
+{% endblock %}

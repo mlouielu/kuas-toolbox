@@ -5,8 +5,11 @@ import const
 import requests
 from lxml import etree
 from flask import Flask, render_template, request
+from flask.ext.misaka import Misaka
+
 
 app = Flask(__name__)
+Misaka(app)
 app.debug = False
 app.secret_key = 'ggalkjfds;aksjdf@@'
 
@@ -78,6 +81,13 @@ def committee():
     return render_template("committee.html",
                            committee_list=const.committee_list,
                            ga=const.ga_string)
+
+
+@app.route("/law")
+def kuaslaw():
+    content = requests.get("https://raw.githubusercontent.com/grapherd/kuaslaw/master/README.md").content
+
+    return render_template("law.html", content=content)
 
 
 @app.route("/ppp")
