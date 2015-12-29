@@ -85,7 +85,7 @@ def committee():
 
 @app.route("/law")
 def kuaslaw():
-    content = requests.get("https://raw.githubusercontent.com/grapherd/kuaslaw/master/README.md").content
+    content = requests.get("https://raw.githubusercontent.com/kuassp/kuaslaw/master/README.md").content
 
     try:
         return render_template("law.html", content=content)
