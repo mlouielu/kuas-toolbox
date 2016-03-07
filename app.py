@@ -5,11 +5,11 @@ import const
 import requests
 from lxml import etree
 from flask import Flask, render_template, request
-#from flask.ext.misaka import Misaka
+from flask.ext.misaka import Misaka
 
 
 app = Flask(__name__)
-#Misaka(app)
+Misaka(app)
 app.debug = False
 app.secret_key = 'ggalkjfds;aksjdf@@'
 
@@ -85,7 +85,8 @@ def committee():
 
 @app.route("/law")
 def kuaslaw():
-    content = requests.get("https://raw.githubusercontent.com/kuassp/kuaslaw/master/README.md").content
+    content = requests.get(
+        "https://raw.githubusercontent.com/kuassp/kuaslaw/master/README.md").content
 
     try:
         return render_template("law.html", content=content)
@@ -196,7 +197,7 @@ def bameeting_issue(issue_no):
 
 @app.route("/cameeting/<string:issue_no>")
 def cameeting_issue(issue_no):
-    r = requests.post("http://cameeting.kuas.edu.tw/EducationalAdministrateMeeting.asp",
+    r = requests.post("http://cameeting.kuas.edu.tw/EducationalAdministrateMeetingRecord.asp",
                       data={
                           "Meeting_ID": issue_no.encode("big5"),
                           "Meeting_ID0": ""
@@ -221,6 +222,19 @@ def cameeting_issue(issue_no):
     # Remove basefont tag
     for basefont in root.xpath("//basefont"):
         basefont.getparent().remove(basefont)
+
+    # Add anchor to b
+    for b in root.xpath("//b")[6:]:
+        b_text = b.text
+        b.text = ""
+        b.attrib["id"] = b_text
+
+        a = etree.SubElement(b, "a")
+        a.attrib["href"] = "#" + b_text
+        a.text = b_text
+
+        a.attrib["style"] = "text-decoration:none;color:black"
+
 
     # Add id to font tags
     for index, font in enumerate(root.xpath("//font")):
