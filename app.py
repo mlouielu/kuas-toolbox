@@ -137,10 +137,12 @@ def ppp():
 @app.route("/bameeting")
 def bameeting():
     uam, acm = get_meeting_list()
+    cam = get_cameeting_list()
 
     return render_template("bameeting.html",
                            uam=uam,
-                           acm=acm)
+                           acm=acm,
+                           cam=cam)
 
 
 @app.route("/bameeting_detail/<string:issue_no>")

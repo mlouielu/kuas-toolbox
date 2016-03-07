@@ -125,6 +125,14 @@
        {% endfor %}
        </div>
     </div>
+   <div class="col-sm-6 col-md-4 text-center">
+       <h2>教務會議</h2>
+       <div class="btn-group-vertical" id="acm">
+       {% for cid in cam %}
+           <a href="/cameeting/{{cid[1]}}" class="btn btn-default">{{ cid[0] }}</a>
+       {% endfor %}
+       </div>
+    </div>
 </div>
 
 {% endblock %}
