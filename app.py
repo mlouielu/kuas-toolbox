@@ -182,5 +182,51 @@ def bameeting_issue(issue_no):
         return content
 
 
+@app.route("/cameeting/<string:issue_no>")
+def cameeting_issue(issue_no):
+    r = requests.post("http://cameeting.kuas.edu.tw/EducationalAdministrateMeeting.asp",
+                      data={
+                          "Meeting_ID": issue_no.encode("big5"),
+                          "Meeting_ID0": ""
+                      })
+
+    r.encoding = "big5"
+    content = r.text
+    content = content.replace(
+        ".\\ftpdata\\", "http://cameeting.kuas.edu.tw/.\\ftpdata\\")
+    content = content.replace(
+        ".\\Sign\\", "http://cameeting.kuas.edu.tw/.\\Sign\\")
+
+    root = etree.HTML(content)
+
+    # Change titles
+    root.xpath("//title")[0].text = u"國立高雄應用科技大學 - %s - 會議記錄" % (issue_no)
+
+    # Remove scripts tag
+    for script in root.xpath("//script"):
+        script.getparent().remove(script)
+
+    # Remove basefont tag
+    for basefont in root.xpath("//basefont"):
+        basefont.getparent().remove(basefont)
+
+    # Add id to font tags
+    for index, font in enumerate(root.xpath("//font")):
+        font.attrib["id"] = str(index + 1)
+
+        # Check follow-up report div
+        if not font.xpath("div/text()") and font.xpath("div"):
+            font.xpath("div")[0].text = "DELETE"
+
+    # Add GA tag
+    ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
+    ga_tag.text = const.ga_string
+
+    content = etree.tostring(root, encoding="utf-8").decode("utf-8")
+    content = content.replace("&#13;", "")
+
+    return content
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
