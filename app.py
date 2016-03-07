@@ -28,14 +28,28 @@ def get_meeting_list():
     return university_affairs_meeting, administrative_council_meeting
 
 
+def get_cameeting_list():
+    r = requests.get("http://cameeting.kuas.edu.tw/EducationalAdministrateMeeting.asp")
+    r.encoding = "big5"
+
+    root = etree.HTML(r.text)
+
+    ca_meeting = [(i.text, i.values()[0]) for i in root.xpath(
+        "//select[@name='State0']")[0].iter()][1:]
+
+    return ca_meeting
+
+
 @app.route("/sitemap.xml")
 def sitemap():
     url_root = request.url_root[:-1]
 
     uam, acm = get_meeting_list()
+    cam = get_cameeting_list()
     rules = list(app.url_map.iter_rules()) + \
         ["/bameeting/" + i[1] for i in uam] + \
-        ["/bameeting/" + i[1] for i in acm]
+        ["/bameeting/" + i[1] for i in acm] + \
+        ["/cameeting/" + i[1] for i in cam]
 
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
