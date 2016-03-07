@@ -60,8 +60,8 @@
         safe = document.getElementById("charges_safe");
         accurate = document.getElementById("charges_accurate");
 
-        safe.innerHTML = "安全雜費: " + charge_safe + " 圓整";
-        accurate.innerHTML = "精準雜費: " + charge_accurate + " 圓整";
+        safe.innerHTML = "安全雜費: " + charge_safe + " 元整";
+        accurate.innerHTML = "精準雜費: " + charge_accurate + " 元整";
     }
 
     function change_capital() {
@@ -76,7 +76,7 @@
         accurate = document.getElementById("charges_accurate");
 
 
-        if (chinese_capital !== "圓整") {
+        if (chinese_capital !== "元整") {
             basic.innerHTML = "懇請學生會補助共同經費" + chinese_capital;
             advance.innerHTML = "懇請學生會補助基本經費" + chinese_capital;
             bus.innerHTML = "懇請學生會補助燕巢車資" + chinese_capital;
@@ -118,7 +118,7 @@
             }
         };
 
-        result.push("圓整");
+        result.push("元整");
 
         return result.join("");
     }
