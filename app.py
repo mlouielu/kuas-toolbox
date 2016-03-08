@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import meeting
 import const
 import requests
@@ -28,8 +29,19 @@ def get_meeting_list():
     return university_affairs_meeting, administrative_council_meeting
 
 
+def get_latest_meeting_list():
+    r = requests.get("http://bameeting.kuas.edu.tw/Meeting_Html_Sel.asp")
+    r.encoding = "big5"
+
+    root = etree.HTML(r.text)
+
+    return [(i.text, i.values()[0]) for i in root.xpath(
+        "//select[@name='State']")[0].iter()][1:]
+
+
 def get_cameeting_list():
-    r = requests.get("http://cameeting.kuas.edu.tw/EducationalAdministrateMeeting.asp")
+    r = requests.get(
+        "http://cameeting.kuas.edu.tw/EducationalAdministrateMeeting.asp")
     r.encoding = "big5"
 
     root = etree.HTML(r.text)
@@ -38,6 +50,16 @@ def get_cameeting_list():
         "//select[@name='State0']")[0].iter()][1:]
 
     return ca_meeting
+
+
+def get_latest_cameeting_list():
+    r = requests.get("http://cameeting.kuas.edu.tw/Meeting_Html_Sel.asp")
+    r.encoding = "big5"
+
+    root = etree.HTML(r.text)
+
+    return [(i.text, i.values()[0]) for i in root.xpath(
+        "//select[@name='State']")[0].iter()][1:]
 
 
 @app.route("/sitemap.xml")
@@ -145,6 +167,33 @@ def bameeting():
                            cam=cam)
 
 
+@app.route("/bameeting/latest")
+def bameeting_latest():
+    uam = get_latest_meeting_list()
+    cam = get_latest_cameeting_list()
+
+    return render_template("bameeting_latest.html",
+                           uam=uam,
+                           cam=cam)
+
+
+@app.route("/bameeting/latest/<string:issue_no>")
+def bameeting_latest_issue(issue_no):
+    r = requests.post("http://bameeting.kuas.edu.tw/Meeting_Html.asp",
+                      data={"Meeting_ID": issue_no.encode("big5")})
+
+    r.encoding = "big5"
+    content = r.text
+    content = content.replace(
+        ".\\ftpdata\\", "http://bameeting.kuas.edu.tw/.\\ftpdata\\")
+    content = content.replace(
+        ".\\Sign\\", "http://bameeting.kuas.edu.tw/.\\Sign\\")
+
+    content = meeting.meeting_parse(content, issue_no)
+
+    return content
+
+
 @app.route("/bameeting_detail/<string:issue_no>")
 def bameeting_detail_issue(issue_no):
     root = meeting.get_meeting_root(issue_no)
@@ -168,47 +217,26 @@ def bameeting_issue(issue_no):
         content = content.replace(
             ".\\Sign\\", "http://bameeting.kuas.edu.tw/.\\Sign\\")
 
-        root = etree.HTML(content)
-
-        # Change titles
-        root.xpath("//title")[0].text = u"國立高雄應用科技大學 - %s - 會議記錄" % (issue_no)
-
-        # Remove scripts tag
-        for script in root.xpath("//script"):
-            script.getparent().remove(script)
-
-        # Remove basefont tag
-        for basefont in root.xpath("//basefont"):
-            basefont.getparent().remove(basefont)
-
-        # Add anchor to b
-        for b in root.xpath("//b")[6:]:
-            b_text = b.text
-            b.text = ""
-            b.attrib["id"] = b_text
-
-            a = etree.SubElement(b, "a")
-            a.attrib["href"] = "#" + b_text
-            a.text = b_text
-
-            a.attrib["style"] = "text-decoration:none;color:black"
-
-        # Add id to font tags
-        for index, font in enumerate(root.xpath("//font")):
-            font.attrib["id"] = str(index + 1)
-
-            # Check follow-up report div
-            if not font.xpath("div/text()") and font.xpath("div"):
-                font.xpath("div")[0].text = "DELETE"
-
-        # Add GA tag
-        ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
-        ga_tag.text = const.ga_string
-
-        content = etree.tostring(root, encoding="utf-8").decode("utf-8")
-        content = content.replace("&#13;", "")
+        content = meeting.meeting_parse(content, issue_no)
 
         return content
+
+
+@app.route("/cameeting/latest/<string:issue_no>")
+def cameeting_latest_issue(issue_no):
+    r = requests.post("http://cameeting.kuas.edu.tw/Meeting_Html.asp",
+                      data={"Meeting_ID": issue_no.encode("big5")})
+
+    r.encoding = "big5"
+    content = r.text
+    content = content.replace(
+        ".\\ftpdata\\", "http://cameeting.kuas.edu.tw/.\\ftpdata\\")
+    content = content.replace(
+        ".\\Sign\\", "http://cameeting.kuas.edu.tw/.\\Sign\\")
+
+    content = meeting.meeting_parse(content, issue_no)
+
+    return content
 
 
 @app.route("/cameeting/<string:issue_no>")
@@ -226,46 +254,7 @@ def cameeting_issue(issue_no):
     content = content.replace(
         ".\\Sign\\", "http://cameeting.kuas.edu.tw/.\\Sign\\")
 
-    root = etree.HTML(content)
-
-    # Change titles
-    root.xpath("//title")[0].text = u"國立高雄應用科技大學 - %s - 會議記錄" % (issue_no)
-
-    # Remove scripts tag
-    for script in root.xpath("//script"):
-        script.getparent().remove(script)
-
-    # Remove basefont tag
-    for basefont in root.xpath("//basefont"):
-        basefont.getparent().remove(basefont)
-
-    # Add anchor to b
-    for b in root.xpath("//b")[6:]:
-        b_text = b.text
-        b.text = ""
-        b.attrib["id"] = b_text
-
-        a = etree.SubElement(b, "a")
-        a.attrib["href"] = "#" + b_text
-        a.text = b_text
-
-        a.attrib["style"] = "text-decoration:none;color:black"
-
-
-    # Add id to font tags
-    for index, font in enumerate(root.xpath("//font")):
-        font.attrib["id"] = str(index + 1)
-
-        # Check follow-up report div
-        if not font.xpath("div/text()") and font.xpath("div"):
-            font.xpath("div")[0].text = "DELETE"
-
-    # Add GA tag
-    ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
-    ga_tag.text = const.ga_string
-
-    content = etree.tostring(root, encoding="utf-8").decode("utf-8")
-    content = content.replace("&#13;", "")
+    content = meeting.meeting_parse(content, issue_no)
 
     return content
 

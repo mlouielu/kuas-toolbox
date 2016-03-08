@@ -108,12 +108,13 @@
 </div>
 </div>
 
+
 <div class="row">
    <div class="col-sm-6 col-md-4 text-center">
        <h2>校務會議</h2>
        <div class="btn-group-vertical" id="uam">
        {% for uid in uam %}
-          <a href="/bameeting/{{uid[1]}}" class="btn btn-flat btn-default">{{ uid[0] }}</a>
+          <a href="/bameeting/{{uid[1]}}" class="btn btn-raised btn-default">{{ uid[0] }}</a>
        {% endfor %}
        </div>
    </div>
@@ -121,15 +122,15 @@
        <h2>行政會議</h2>
        <div class="btn-group-vertical" id="acm">
        {% for aid in acm %}
-           <a href="/bameeting/{{aid[1]}}" class="btn btn-default">{{ aid[0] }}</a>
+           <a href="/bameeting/{{aid[1]}}" class="btn btn-raised btn-default">{{ aid[0] }}</a>
        {% endfor %}
        </div>
     </div>
    <div class="col-sm-6 col-md-4 text-center">
        <h2>教務會議</h2>
-       <div class="btn-group-vertical" id="acm">
+       <div class="btn-group-vertical" id="cam">
        {% for cid in cam %}
-           <a href="/cameeting/{{cid[1]}}" class="btn btn-default">{{ cid[0] }}</a>
+           <a href="/cameeting/{{cid[1]}}" class="btn btn-raised btn-default">{{ cid[0] }}</a>
        {% endfor %}
        </div>
     </div>

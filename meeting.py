@@ -2,6 +2,7 @@
 
 import re
 import requests
+import const
 from lxml import etree
 
 
@@ -314,6 +315,7 @@ def get_all_resolutions():
         for resolution in content["resolutions"]:
             pass
 
+
 def test_admin_meeting_header():
     acm_list = get_administrative_meeting_list()
 
@@ -323,6 +325,49 @@ def test_admin_meeting_header():
         print(header['title'])
         print("-----------------------------------------")
 
+
+def meeting_parse(content, issue_no):
+    root = etree.HTML(content)
+
+    # Change titles
+    root.xpath("//title")[0].text = u"國立高雄應用科技大學 - %s - 會議記錄" % (issue_no)
+
+    # Remove scripts tag
+    for script in root.xpath("//script"):
+        script.getparent().remove(script)
+
+    # Remove basefont tag
+    for basefont in root.xpath("//basefont"):
+        basefont.getparent().remove(basefont)
+
+    # Add anchor to b
+    for b in root.xpath("//b")[6:]:
+        b_text = b.text
+        b.text = ""
+        b.attrib["id"] = b_text
+
+        a = etree.SubElement(b, "a")
+        a.attrib["href"] = "#" + b_text
+        a.text = b_text
+
+        a.attrib["style"] = "text-decoration:none;color:black"
+
+    # Add id to font tags
+    for index, font in enumerate(root.xpath("//font")):
+        font.attrib["id"] = str(index + 1)
+
+        # Check follow-up report div
+        if not font.xpath("div/text()") and font.xpath("div"):
+            font.xpath("div")[0].text = "DELETE"
+
+    # Add GA tag
+    ga_tag = etree.SubElement(root.xpath("/html/head")[0], "script")
+    ga_tag.text = const.ga_string
+
+    content = etree.tostring(root, encoding="utf-8").decode("utf-8")
+    content = content.replace("&#13;", "")
+
+    return content
 
 if __name__ == "__main__":
     pass

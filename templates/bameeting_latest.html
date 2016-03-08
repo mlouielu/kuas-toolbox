@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>高應工具箱 - 行政/校務會議記錄 - 下次會議</title>
+{% endblock %}
+
+{% block meta_meta %}
+    <meta charset="utf-8">
+    <meta property="og:image" content="http://i.imgur.com/oL8Oa0I.jpg"/>
+    <meta property="og:title" content="高應工具箱 - 行政/校務會議記錄 - 下次會議"/>
+    <meta property="og:description"
+    content="好用的高應行政/校務會議記錄查詢系統, 工具人必備！" />
+{% endblock %}
+
+
+
+{% block container %}
+<style>
+.frameWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    padding-top: 25px;
+    height: 0;
+}
+.frameWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+}
+
+.btn {
+    padding: 8px 15px;
+}
+</style>
+
+
+<div class="row">
+   <div class="col-sm-6 col-md-4 text-center">
+       <h2>校務/行政會議</h2>
+       <div class="btn-group-vertical" id="uam">
+       {% for uid in uam %}
+          <a href="/bameeting/latest/{{uid[1]}}" class="btn btn-raised btn-default">{{ uid[0] }}</a>
+       {% endfor %}
+       </div>
+   </div>
+   <div class="col-sm-6 col-md-4 text-center">
+       <h2>教務會議</h2>
+       <div class="btn-group-vertical" id="cam">
+       {% for cid in cam %}
+           <a href="/cameeting/latest/{{cid[1]}}" class="btn btn-raised btn-default">{{ cid[0] }}</a>
+       {% endfor %}
+       </div>
+    </div>
+</div>
+
+{% endblock %}
