@@ -101,6 +101,12 @@ def memo():
     return render_template("memo.html")
 
 
+@app.route("/fuckthis/2015")
+def fuckthis2015():
+    return render_template("2015fuckthis.html",
+                           ga=const.ga_string)
+
+
 @app.route("/fuckthis")
 def fuckthis():
     return render_template("fuckthis.html",
