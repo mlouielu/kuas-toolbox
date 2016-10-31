@@ -67,11 +67,11 @@ def sitemap():
     url_root = request.url_root[:-1]
 
     uam, acm = get_meeting_list()
-    cam = get_cameeting_list()
+    #cam = get_cameeting_list()
     rules = list(app.url_map.iter_rules()) + \
         ["/bameeting/" + i[1] for i in uam] + \
-        ["/bameeting/" + i[1] for i in acm] + \
-        ["/cameeting/" + i[1] for i in cam]
+        ["/bameeting/" + i[1] for i in acm]
+        #["/cameeting/" + i[1] for i in cam]
 
     return render_template("sitemap.xml", url_root=url_root, rules=rules)
 
@@ -165,25 +165,25 @@ def ppp():
 @app.route("/bameeting")
 def bameeting():
     uam, acm = get_meeting_list()
-    cam = get_cameeting_list()
+    #cam = get_cameeting_list()
 
     return render_template("bameeting.html",
                            uam=uam,
-                           acm=acm,
-                           cam=cam)
+                           acm=acm)
+                           #cam=cam)
 
 
-@app.route("/bameeting/latest")
+#@app.route("/bameeting/latest")
 def bameeting_latest():
     uam = get_latest_meeting_list()
-    cam = get_latest_cameeting_list()
+    #cam = get_latest_cameeting_list()
 
     return render_template("bameeting_latest.html",
-                           uam=uam,
-                           cam=cam)
+                           uam=uam)
+                           #cam=cam)
 
 
-@app.route("/bameeting/latest/<string:issue_no>")
+#@app.route("/bameeting/latest/<string:issue_no>")
 def bameeting_latest_issue(issue_no):
     r = requests.post("http://bameeting.kuas.edu.tw/Meeting_Html.asp",
                       data={"Meeting_ID": issue_no.encode("big5")})
